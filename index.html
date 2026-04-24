@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRM International School | Sikar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        srmGreen: '#004d2c',
+                        srmGreenDark: '#00361f',
+                        srmGold: '#d4af37',
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .page { display: none; min-height: 80vh; }
+        .page.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .gold-shine { position: relative; overflow: hidden; }
+        .gold-shine::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent); transform: rotate(45deg); transition: 0.6s; }
+        .gold-shine:hover::after { left: 100%; top: 100%; }
+
+        .topper-card { border: 2px solid #d4af37; border-radius: 15px; overflow: hidden; position: relative; transition: 0.3s; }
+        .topper-card:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        #admin-panel { display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
+        
+        /* Mobile Nav Toggle */
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: flex; }
+    </style>
+</head>
+<body class="font-montserrat bg-white text-gray-800">
+
+    <div id="admin-panel" class="flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl border-t-8 border-srmGold">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-srmGreen">SRM Systems Login</h2>
+                <button onclick="closeAdmin()" class="text-gray-400 text-2xl">&times;</button>
+            </div>
+            <div id="admin-login">
+                <input type="password" id="admin-pass" placeholder="System Password" class="w-full p-4 border rounded-xl mb-4 focus:ring-2 focus:ring-srmGold outline-none">
+                <button onclick="checkAdminPass()" class="w-full bg-srmGreen text-white py-4 rounded-xl font-bold hover:bg-srmGreenDark transition-all">ACCESS DASHBOARD</button>
+                <p class="text-center text-xs text-gray-400 mt-4 underline cursor-pointer" onclick="alert('Hint: 1234')">Forgot Password?</p>
+            </div>
+            <div id="admin-tools" class="hidden space-y-3">
+                <h3 class="text-green-600 font-bold">Welcome, Administrator</h3>
+                <button class="w-full text-left p-4 bg-gray-50 rounded-lg hover:bg-srmGold/10 transition">📝 Edit News & Circulars</button>
+                <button class="w-full text-left p-4 bg-gray-50 rounded-lg hover:bg-srmGold/10 transition">🎓 Update Board Results</button>
+                <button class="w-full text-left p-4 bg-gray-50 rounded-lg hover:bg-srmGold/10 transition">🖼️ Upload Gallery Photos</button>
+                <button onclick="logoutAdmin()" class="w-full mt-6 py-2 text-red-500 font-bold uppercase text-xs tracking-widest">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-srmGreen text-white py-2 px-4 md:px-12 flex justify-between items-center text-[10px] md:text-xs">
+        <div class="flex gap-4">
+            <span class="flex items-center gap-1">📞 +91 98765 43210</span>
+            <span class="hidden sm:flex items-center gap-1">📧 info@srminternational.com</span>
+        </div>
+        <div class="flex gap-3 font-bold uppercase tracking-wider">
+            <span class="text-srmGold">CBSE CODE: 1234567</span>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-50 bg-white shadow-md border-b-2 border-srmGold/20">
+        <div class="max-w-7xl mx-auto px-4 md:px-12 h-20 flex justify-between items-center">
+            <div onclick="logoClick()" class="flex items-center gap-3 cursor-pointer select-none">
+                <div class="w-12 h-12 bg-srmGreen rounded-full flex items-center justify-center border-2 border-srmGold text-srmGold font-black text-xl">S</div>
+                <div>
+                    <h1 class="text-lg md:text-2xl font-bold text-srmGreen leading-none uppercase">SRM <span class="text-srmGold">International</span></h1>
+                    <p class="text-[9px] font-bold text-gray-400 tracking-widest">SIKAR, RAJASTHAN</p>
+                </div>
+            </div>
+
+            <ul class="hidden lg:flex gap-8 text-xs font-black text-srmGreen uppercase tracking-widest">
+                <li onclick="showPage('home')" class="cursor-pointer hover:text-srmGold transition">Home</li>
+                <li onclick="showPage('about')" class="cursor-pointer hover:text-srmGold transition">About Us</li>
+                <li onclick="showPage('academics')" class="cursor-pointer hover:text-srmGold transition">Academics</li>
+                <li onclick="showPage('gallery')" class="cursor-pointer hover:text-srmGold transition">Gallery</li>
+                <li onclick="showPage('contact')" class="cursor-pointer hover:text-srmGold transition">Contact</li>
+            </ul>
+
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-srmGreen text-2xl">☰</button>
+        </div>
+        
+        <div id="mobile-menu" class="lg:hidden flex-col bg-srmGreen text-white p-6 space-y-4 text-center font-bold">
+            <a onclick="showPage('home'); toggleMobileMenu()">HOME</a>
+            <a onclick="showPage('about'); toggleMobileMenu()">ABOUT US</a>
+            <a onclick="showPage('academics'); toggleMobileMenu()">ACADEMICS</a>
+            <a onclick="showPage('gallery'); toggleMobileMenu()">GALLERY</a>
+            <a onclick="showPage('contact'); toggleMobileMenu()">CONTACT</a>
+        </div>
+    </nav>
+
+    <main id="home-page" class="page active">
+        <section class="relative h-[70vh] md:h-[85vh] flex items-center">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-srmGreen/95 via-srmGreen/40 to-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80" class="w-full h-full object-cover">
+            </div>
+            <div class="relative z-20 px-6 md:px-24 max-w-7xl mx-auto w-full">
+                <span class="inline-block px-4 py-1 bg-srmGold text-srmGreen font-bold text-xs rounded-full mb-6">ISO 9001:2015 CERTIFIED</span>
+                <h1 class="font-playfair text-4xl md:text-8xl text-white font-bold mb-6">Redefining <br/><span class="text-srmGold italic">Global</span> Education</h1>
+                <p class="text-gray-200 max-w-xl text-sm md:text-lg mb-8 leading-relaxed">SRM International School is committed to providing a holistic environment where tradition and technology go hand in hand.</p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="gold-shine bg-srmGold text-srmGreen px-8 py-4 rounded font-black text-xs tracking-widest shadow-xl">ADMISSIONS OPEN</button>
+                    <button class="border-2 border-white text-white px-8 py-4 rounded font-black text-xs tracking-widest hover:bg-white hover:text-srmGreen transition">VIRTUAL TOUR</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-srmGold font-bold tracking-[0.3em] uppercase text-sm mb-2">Our Features</h2>
+                    <h3 class="font-playfair text-4xl md:text-5xl text-srmGreen font-bold">World Class Facilities</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="bg-white p-10 rounded-2xl shadow-xl text-center hover:border-b-8 border-srmGold transition-all group">
+                        <div class="w-24 h-24 bg-srmGreen/10 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl group-hover:bg-srmGreen group-hover:rotate-12 transition-all">🔬</div>
+                        <h4 class="font-bold text-xl text-srmGreen mb-4">Science Labs</h4>
+                        <p class="text-gray-500 text-sm">Advanced laboratories for Physics, Chemistry, and Biology to foster curiosity.</p>
+                    </div>
+                    <div class="bg-white p-10 rounded-2xl shadow-xl text-center hover:border-b-8 border-srmGold transition-all group">
+                        <div class="w-24 h-24 bg-srmGreen/10 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl group-hover:bg-srmGreen group-hover:rotate-12 transition-all">💻</div>
+                        <h4 class="font-bold text-xl text-srmGreen mb-4">Smart Classes</h4>
+                        <p class="text-gray-500 text-sm">Every classroom is equipped with interactive digital boards and high-speed Wi-Fi.</p>
+                    </div>
+                    <div class="bg-white p-10 rounded-2xl shadow-xl text-center hover:border-b-8 border-srmGold transition-all group">
+                        <div class="w-24 h-24 bg-srmGreen/10 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl group-hover:bg-srmGreen group-hover:rotate-12 transition-all">🏀</div>
+                        <h4 class="font-bold text-xl text-srmGreen mb-4">Sports Arena</h4>
+                        <p class="text-gray-500 text-sm">Professional coaching for Basketball, Cricket, and Indoor sports like Table Tennis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-srmGold font-bold tracking-[0.3em] uppercase text-sm mb-2">Our Pride</h2>
+                    <h3 class="font-playfair text-4xl md:text-5xl text-srmGreen font-bold">Top Rank Students</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="topper-card p-4 text-center">
+                        <img src="https://i.pravatar.cc/300?img=11" class="w-full h-48 object-cover rounded-xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h5 class="font-bold text-srmGreen">Rahul Sharma</h5>
+                        <p class="text-srmGold font-bold">98.4% (CBSE)</p>
+                    </div>
+                    <div class="topper-card p-4 text-center">
+                        <img src="https://i.pravatar.cc/300?img=26" class="w-full h-48 object-cover rounded-xl mb-4 grayscale hover:grayscale-0 transition-all">
+                        <h5 class="font-bold text-srmGreen">Priya Verma</h5>
+                        <p class="text-srmGold font-bold">97.8% (CBSE)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <main id="about-page" class="page py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="absolute -top-4 -left-4 w-full h-full border-4 border-srmGold rounded-2xl z-0"></div>
+                    <img src="https://images.unsplash.com/photo-1523050853064-843026330833?auto=format&fit=crop&q=80" class="relative z-10 rounded-2xl shadow-2xl">
+                </div>
+                <div>
+                    <h2 class="text-srmGold font-bold uppercase tracking-widest text-sm mb-4">About the Society</h2>
+                    <h3 class="font-playfair text-4xl text-srmGreen font-bold mb-6 italic">Established for Human Welfare</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">SRM International School was established to foster an atmosphere for the all-round development of students. We follow a strict ethical curriculum combined with modern science.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-gray-50 border-l-4 border-srmGold">
+                            <h4 class="font-bold text-srmGreen">Mission</h4>
+                            <p class="text-[10px] text-gray-500 uppercase">To create global citizens with strong local values.</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 border-l-4 border-srmGreen">
+                            <h4 class="font-bold text-srmGreen">Vision</h4>
+                            <p class="text-[10px] text-gray-500 uppercase">A world where education leads to true liberation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-srmGreen text-white pt-20 pb-10 px-6 border-t-[12px] border-srmGold">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 text-center md:text-left">
+            <div>
+                <h4 class="text-srmGold font-bold text-xl mb-6 font-playfair">SRM INTERNATIONAL</h4>
+                <p class="text-gray-400 text-sm">Where tradition meets the future. Join us in shaping a better tomorrow for your children.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6">Quick Links</h4>
+                <ul class="text-gray-400 text-sm space-y-3 font-bold">
+                    <li onclick="showPage('home')" class="cursor-pointer hover:text-srmGold">Home</li>
+                    <li onclick="showPage('about')" class="cursor-pointer hover:text-srmGold">About Us</li>
+                    <li onclick="showPage('gallery')" class="cursor-pointer hover:text-srmGold">Gallery</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6">Contact Us</h4>
+                <p class="text-gray-400 text-sm">Sikar Road, Fatehpur,<br/>Rajasthan - 332301<br/><br/>Phone: +91 98765 43210</p>
+            </div>
+        </div>
+        <div class="mt-20 pt-10 border-t border-white/10 text-center text-[10px] text-gray-500 uppercase tracking-widest">
+            © 2026 SRM International School | Designed by Skyrise Digital
+        </div>
+    </footer>
+
+    <script>
+        // PAGE SWITCHER
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId + '-page').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // MOBILE MENU
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
+
+        // LOGO TAPS (5 TAPS FOR ADMIN)
+        let taps = 0;
+        function logoClick() {
+            taps++;
+            if(taps >= 5) { openAdmin(); taps = 0; }
+            setTimeout(() => taps = 0, 3000);
+        }
+
+        // KEYBOARD TRIGGER (TYPE 'ADMIN')
+        let word = "";
+        window.addEventListener('keydown', (e) => {
+            word += e.key.toLowerCase();
+            if(word.includes("admin")) { openAdmin(); word = ""; }
+            if(word.length > 10) word = "";
+        });
+
+        // ADMIN CONTROLS
+        function openAdmin() { document.getElementById('admin-panel').style.display = 'flex'; }
+        function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+        
+        function checkAdminPass() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === "1234") {
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-tools').classList.remove('hidden');
+            } else {
+                alert("ACCESS DENIED");
+            }
+        }
+        function logoutAdmin() {
+            document.getElementById('admin-pass').value = "";
+            document.getElementById('admin-login').classList.remove('hidden');
+            document.getElementById('admin-tools').classList.add('hidden');
+            closeAdmin();
+        }
+    </script>
+</body>
+</html>
