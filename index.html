@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRM International School – Learn · Excel · Shine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1a2b5f;
+  --gold: #c8a84b;
+  --gold-light: #e8c96b;
+  --white: #ffffff;
+  --gray-light: #f4f6fb;
+  --dark-footer: #0d1733;
+  --transition: 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family:'Raleway', sans-serif; color:#333; line-height:1.6; overflow-x: hidden; }
+
+/* ─── NAVIGATION ─── */
+#navbar {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  background: var(--navy); padding: 12px 5%;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.logo-area { color: white; text-decoration: none; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.logo-area h1 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); letter-spacing: 1px; }
+.nav-links { display: flex; gap: 25px; list-style: none; }
+.nav-links a { color: #cdd8ef; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: var(--transition); }
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+/* ─── HERO ─── */
+#hero {
+  height: 90vh; 
+  background: linear-gradient(rgba(26,43,95,0.85), rgba(26,43,95,0.85)), url('photo1.jpg');
+  background-size: cover; background-position: center;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; color: white; padding: 0 20px; margin-top: 60px;
+}
+#hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 15px; }
+#hero p { font-size: 1.2rem; max-width: 800px; margin-bottom: 30px; color: #b0c4e0; }
+
+/* ─── SECTIONS ─── */
+section { padding: 90px 10%; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--navy); }
+.divider { width: 70px; height: 4px; background: var(--gold); margin: 12px auto; border-radius: 2px; }
+
+/* ─── GALLERY ─── */
+.gallery-grid {
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+  gap: 20px;
+}
+.gallery-item {
+  aspect-ratio: 4/3; background: #eee; border-radius: 12px; overflow: hidden;
+  border: 1px solid #ddd; position: relative; cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+.gallery-item:hover img { transform: scale(1.1); }
+.gallery-overlay {
+  position: absolute; inset: 0; background: rgba(26,43,95,0.4);
+  opacity: 0; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+
+/* ─── MEGA FOOTER ─── */
+footer { background: var(--dark-footer); color: #a49685; padding: 70px 10% 30px; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 50px; }
+.footer-col h4 { color: #fff; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 25px; text-transform: uppercase; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul li a { color: #a49685; text-decoration: none; font-size: 0.95rem; transition: 0.2s; }
+.footer-col ul li a:hover { color: var(--gold); padding-left: 5px; }
+.footer-bottom { 
+  border-top: 1px solid rgba(255,255,255,0.05); 
+  margin-top: 50px; padding-top: 25px; 
+  text-align: center; font-size: 0.85rem; color: #555;
+}
+
+/* ─── UTILS ─── */
+.btn { 
+  background: linear-gradient(135deg, var(--gold), var(--gold-light)); 
+  color: var(--navy); padding: 14px 35px; border: none; 
+  font-weight: 700; cursor: pointer; border-radius: 30px; 
+  transition: var(--transition); box-shadow: 0 5px 15px rgba(200,168,75,0.3);
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(200,168,75,0.5); }
+
+/* Lightbox */
+#lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+  z-index: 2000; display: none; align-items: center; justify-content: center;
+}
+#lightbox img { max-width: 90%; max-height: 85%; border-radius: 8px; border: 4px solid var(--gold); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  section { padding: 60px 5%; }
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="logo-area" id="logoBtn">
+    <div style="width:40px; height:40px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--navy); font-weight:900;">SRM</div>
+    <h1>SRM International</h1>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#facilities">Facilities</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <h2 id="hero-title">Where Every Child Learns to Excel & Shine</h2>
+  <p id="hero-desc">Uttarakhand's Premier Institution committed to nurturing well-rounded individuals through academic excellence and values-based education.</p>
+  <button class="btn" onclick="document.getElementById('contact').scrollIntoView()">Admission Open 2025-26</button>
+</section>
+
+<section id="about">
+  <div class="section-header">
+    <h2 id="about-title">A Legacy of Learning</h2>
+    <div class="divider"></div>
+  </div>
+  <div style="max-width:800px; margin:0 auto; text-align:center;">
+    <p id="about-desc">Located in Turka-Tisore, Sitarganj, SRM International School is dedicated to holistic development. We prepare our students for tomorrow's world by blending rigorous CBSE academics with sports like Pencak Silat.</p>
+  </div>
+</section>
+
+<section id="facilities" style="background: var(--gray-light);">
+  <div class="section-header">
+    <h2>World-Class Facilities</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="gallery-grid" id="fac-list"></div>
+</section>
+
+<section id="gallery">
+  <div class="section-header">
+    <h2>School Gallery</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="gallery-grid" id="main-gallery"></div>
+</section>
+
+<section id="contact">
+  <div class="section-header">
+    <h2>Connect With Us</h2>
+    <div class="divider"></div>
+  </div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:40px;">
+    <div style="background:var(--gray-light); padding:40px; border-radius:15px;">
+      <h3 style="color:var(--navy); margin-bottom:20px;">Contact Details</h3>
+      <p>📍 Turka-Tisore, Khatima Road, Sitarganj</p>
+      <p style="margin:15px 0;">📞 9105666000, 9690958398</p>
+      <p>✉️ info@srminternational.edu.in</p>
+    </div>
+    <form style="display:flex; flex-direction:column; gap:15px;">
+      <input type="text" placeholder="Student Name" style="padding:15px; border-radius:8px; border:1px solid #ddd;">
+      <input type="email" placeholder="Email Address" style="padding:15px; border-radius:8px; border:1px solid #ddd;">
+      <textarea placeholder="Message" rows="4" style="padding:15px; border-radius:8px; border:1px solid #ddd;"></textarea>
+      <button type="button" class="btn">Send Enquiry</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Popular Categories</h4>
+      <ul>
+        <li>Academic Excellence</li>
+        <li>Sports Championship</li>
+        <li>Cultural Events</li>
+        <li>Science & Tech</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>📞 9105666000, 9690958398</p>
+      <p>📍 Sitarganj, U.S. Nagar, Uttarakhand</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 SRM International School. Designed for Excellence.
+  </div>
+</footer>
+
+<div id="lightbox" onclick="this.style.display='none'">
+  <img id="lb-img" src="">
+</div>
+
+<script>
+// --- GALLERY GENERATOR (15 Photos) ---
+const galleryContainer = document.getElementById('main-gallery');
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+
+let galleryHTML = '';
+for(let i = 1; i <= 15; i++) {
+    const photoName = `photo${i}.jpg`;
+    galleryHTML += `
+    <div class="gallery-item" onclick="openLightbox('${photoName}')">
+        <img src="${photoName}" alt="School Photo ${i}" onerror="this.src='https://placehold.co/400x300?text=Photo+${i}'">
+        <div class="gallery-overlay"><span style="color:white; font-weight:bold;">VIEW</span></div>
+    </div>`;
+}
+galleryContainer.innerHTML = galleryHTML;
+
+function openLightbox(src) {
+    lbImg.src = src;
+    lb.style.display = 'flex';
+}
+
+// --- FACILITIES GENERATOR ---
+const facList = document.getElementById('fac-list');
+const facilities = [
+  {n: "Smart Classrooms", i: "📚"},
+  {n: "Science Labs", i: "🔬"},
+  {n: "Sports Ground", i: "🏆"},
+  {n: "Library", i: "📖"},
+  {n: "Safe Transport", i: "🚌"},
+  {n: "Martial Arts Dojo", i: "🥋"}
+];
+facList.innerHTML = facilities.map(f => `
+  <div style="background:white; padding:30px; border-radius:15px; text-align:center; border-bottom:4px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+    <div style="font-size:3rem; margin-bottom:15px;">${f.i}</div>
+    <h3 style="color:var(--navy);">${f.n}</h3>
+  </div>
+`).join('');
+
+// --- ADMIN TOGGLE (Tap logo 5 times) ---
+let taps = 0;
+document.getElementById('logoBtn').addEventListener('click', () => {
+    taps++;
+    if(taps === 5) {
+        const pass = prompt("Enter Admin Password:");
+        if(pass === "srm@admin") {
+            const newTitle = prompt("Update Hero Title:", document.getElementById('hero-title').innerText);
+            if(newTitle) document.getElementById('hero-title').innerText = newTitle;
+            alert("Content updated successfully (Session only).");
+        }
+        taps = 0;
+    }
+});
+
+// --- NAV SCROLL EFFECT ---
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if(window.scrollY > 50) nav.style.padding = "8px 5%";
+    else nav.style.padding = "12px 5%";
+});
+</script>
+
+</body>
+</html>
